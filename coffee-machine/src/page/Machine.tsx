@@ -90,7 +90,7 @@ function Machine() {
                             {salesCoffee / 100}
                         </p>
                         <small>
-                            원두 : {bean}
+                            원두 : {bean}g
                         </small>
                     </div>
                     <div>
@@ -104,7 +104,7 @@ function Machine() {
                             {salesJobsTearsTea / 150}
                         </p>
                         <small>
-                            율무 : {jobsTears}
+                            율무 : {jobsTears}g
                         </small>
                     </div>
                     <div>
@@ -118,14 +118,14 @@ function Machine() {
                             {salesLemonTea / 200}
                         </p>
                         <small>
-                            레몬 : {lemon}
+                            레몬 : {lemon}g
                         </small>
                     </div>
                 </section>
                 <footer>
-                    <div>컵 : {cup}</div>
-                    <div>물 : {water}</div>
-                    <div>매출 : {salesTotal}</div>
+                    <div>컵 : {cup}ea</div>
+                    <div>물 : {water}ml</div>
+                    <div>매출 : {salesTotal}원</div>
                 </footer>
             </header>
         </div>
