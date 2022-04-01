@@ -2,62 +2,119 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-    const [cup, setCup] = useState<number>(5)
-    const [bin, setBin] = useState<number>(100)
-    const [water, setWater] = useState<number>(1000)
-    const [eat, setEat] = useState<number>(0)
-    const [message, setMessage] = useState<string>("enjoy coffee~")
+    const [cup, setCup] = useState<number>(10)
+    const [bean, setBean] = useState<number>(100)
+    const [jobsTear, setJobsTear] = useState<number>(100)
+    const [lemon, setLemon] = useState<number>(100)
+    const [water, setWater] = useState<number>(2000)
+    const [eatCoffee, setEatCoffee] = useState<number>(0)
+    const [eatJobsTearTea, setEatJobsTearTea] = useState<number>(0)
+    const [eatLemonTea, setEatLemonTea] = useState<number>(0)
+    const [message, setMessage] = useState<string>("what would you like to drink?")
     const [stop, setStop] = useState<boolean>(false)
-
+    const [process, setProcess] = useState<boolean>(false)
 
     useEffect(() => {
-        if (cup === 0 || bin <= 15 || water <= 150) {
+        if (cup === 0 || bean < 15 || jobsTear < 15 || lemon < 15 || water < 150) {
             setStop(true)
             if (cup === 0) {
-                setMessage("There is no cup.")
+                setMessage("Not enough cup.")
             }
-            if (bin <= 15) {
-                setMessage("There is no bin.")
+            if (bean < 15) {
+                setMessage("Not enough bean.")
             }
-            if (water <= 150) {
-                setMessage("There is no water.")
+            if (jobsTear < 15) {
+                setMessage("Not enough job's tears.")
+            }
+            if (lemon < 15) {
+                setMessage("Not enough lemon.")
+            }
+            if (water < 150) {
+                setMessage("Not enough water.")
             }
         }
-    }, [cup, bin, water])
+    }, [cup, bean, jobsTear, lemon, water])
 
 
     const getCoffee = () => {
         setCup(cup - 1)
-        setBin(bin - 15)
+        setBean(bean - 15)
         setWater(water - 150)
-        setEat(eat + 1)
+        setEatCoffee(eatCoffee + 1)
+        setMessage("enjoy your coffee~")
+    }
+
+    const getJobsTearTea = () => {
+        setCup(cup - 1)
+        setJobsTear(jobsTear - 15)
+        setWater(water - 150)
+        setEatJobsTearTea(eatJobsTearTea + 1)
+        setMessage("enjoy your job's tears tea~")
+    }
+
+    const getLemonTea = () => {
+        setCup(cup - 1)
+        setLemon(lemon - 15)
+        setWater(water - 150)
+        setEatLemonTea(eatLemonTea + 1)
+        setMessage("enjoy your lemon tea~")
     }
 
     return (
         <div className="App">
             <header className="App-header">
-                <h1>Coffee Machine</h1>
-                <p>
-                    <button
-                        onClick={getCoffee}
-                        disabled={stop}
-                    >
-                        Give me a coffee!
-                    </button>
-                </p>
-                <p>
-                    {eat}
-                </p>
-                <p>
+                <h1>자판기</h1>
+                <h4>
                     {message}
-                </p>
-                <p>
-                    Cup : {cup}
-                    {' | '}
-                    Bin : {bin}
-                    {' | '}
-                    Water : {water}
-                </p>
+                </h4>
+                <section>
+                    <div>
+                        <button
+                            onClick={getCoffee}
+                            disabled={stop}
+                        >
+                            {bean < 15 ? "품절" : "커피"}
+                        </button>
+                        <p>
+                            {eatCoffee}
+                        </p>
+                        <small>
+                            원두 : {bean}
+                        </small>
+                    </div>
+                    <div>
+                        <button
+                            onClick={getJobsTearTea}
+                            disabled={stop}
+                        >
+                            {jobsTear < 15 ? "품절" : "율무차"}
+                        </button>
+                        <p>
+                            {eatJobsTearTea}
+                        </p>
+                        <small>
+                            율무 : {jobsTear}
+                        </small>
+                    </div>
+                    <div>
+                        <button
+                            onClick={getLemonTea}
+                            disabled={stop}
+                        >
+                            {lemon < 15 ? "품절" : "레몬티"}
+                        </button>
+                        <p>
+                            {eatLemonTea}
+                        </p>
+                        <small>
+                            레몬 : {lemon}
+                        </small>
+                    </div>
+                </section>
+                <footer>
+                    <div>컵 : {cup}</div>
+                    <div>물 : {water}</div>
+                </footer>
             </header>
         </div>
     )
