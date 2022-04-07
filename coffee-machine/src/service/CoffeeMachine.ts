@@ -21,8 +21,9 @@ interface IDrinkMenus {
     name: string
     price: number
     material: IMakeDrink
-    makeDrink: (machineInventory: IMachineInventory) => boolean
-    isAvailable: (machineInventory: IMachineInventory) => boolean
+    isAvailable: () => boolean
+    makeDrink: () => boolean
+    getEarn: () => number
 }
 
 export const machineInventory: IMachineInventory = {
@@ -36,6 +37,7 @@ export const machineInventory: IMachineInventory = {
 
 class DrinkMenu implements IDrinkMenus {
 
+    makeCount: number = 0;
     constructor(
         public name: string,
         public price: number,
@@ -43,12 +45,8 @@ class DrinkMenu implements IDrinkMenus {
         public inventory: IMachineInventory
     ) { }
 
-    makeDrink = () => {
-        console.log("make Drink", this.name)
-        if (this.isAvailable()) {
-            return true
-        }
-        throw new Error('not enough material')
+    getEarn = () => {
+        return this.makeCount * this.price
     }
 
     isAvailable = () => {
@@ -59,6 +57,19 @@ class DrinkMenu implements IDrinkMenus {
         }
         return true
     }
+
+    makeDrink = () => {
+        if (this.isAvailable()) {
+            console.log("make Drink ok", this.name)
+            for (let materialKey of Object.keys(this.material)) {
+                (this.inventory as any)[materialKey] = (this.inventory as any)[materialKey] - (this.material as any)[materialKey]
+            }
+            this.makeCount++
+            return true
+        }
+        throw new Error('not enough material')
+    }
+
 }
 
 class CustomDrinkMenu extends DrinkMenu {
@@ -69,8 +80,6 @@ class CustomDrinkMenu extends DrinkMenu {
     };
 }
 
-
-
 export class CoffeeMachine {
     drinkMenus: Array<IDrinkMenus> = [];
     inventory: IMachineInventory
@@ -78,7 +87,7 @@ export class CoffeeMachine {
         this.inventory = resource
         this.drinkMenus = [
             new DrinkMenu(
-                'coffee',
+                'Coffee',
                 300,
                 {
                     cup: 1,
@@ -88,7 +97,7 @@ export class CoffeeMachine {
                 resource
             ),
             new DrinkMenu(
-                'cocoa',
+                'Cocoa',
                 400,
                 {
                     cup: 1,
@@ -98,7 +107,7 @@ export class CoffeeMachine {
                 resource
             ),
             new DrinkMenu(
-                'lemon-tea',
+                'Lemon Tea',
                 500,
                 {
                     cup: 1,
@@ -107,82 +116,6 @@ export class CoffeeMachine {
                 },
                 resource
             ),
-            // {
-            //     name: 'cocoa',
-            //     price: 400,
-            //     material: {
-            //         cup: 1,
-            //         water: 150,
-            //         cocoa: 20
-            //     },
-            //     makeDrink: () => {
-            //         this.inventory
-            //         return true
-            //     },
-            //     isAvailable: () => {
-            //         return true
-            //     }
-            // }, {
-            //     name: 'lemon-tea',
-            //     price: 500,
-            //     material: {
-            //         cup: 1,
-            //         water: 200,
-            //         lemon: 30
-            //     },
-            //     makeDrink: () => {
-            //         this.inventory
-            //         return true
-            //     },
-            //     isAvailable: () => {
-            //         return true
-            //     }
-            // }
         ]
     }
-
-    // onMakeDrink(selected: string) {
-    //     const selectedMenu = CoffeeMachine.drinkMenus.find(item => item.name === selected)
-    //     if (selectedMenu) {
-    //         const { material } = selectedMenu
-    //         for (let materialKey of Object.keys(material)) {
-    //             if ((this.inventory as any)[materialKey] > 0) {
-    //                 (this.inventory as any)[materialKey] = (this.inventory as any)[materialKey] - (material as any)[materialKey]
-    //                 console.log(materialKey, (this.inventory as any)[materialKey])
-    //             }
-    //         }
-    //         if (this.inventory.cup > 0) {
-    //             this.inventory.cup = this.inventory.cup - material.cup
-    //             console.log("cup", this.inventory.cup)
-    //         }
-
-    //         if (this.inventory.water >= material.water) {
-    //             this.inventory.water = this.inventory.water - material.water
-    //             console.log("water", this.inventory.water)
-    //         }
-
-
-    //         if (selected === "coffee" && material.coffee) {
-    //             if (this.inventory.coffee >= material.coffee) {
-    //                 this.inventory.coffee = this.inventory.coffee - material.coffee
-    //                 console.log("coffee", this.inventory.coffee)
-    //             }
-    //         }
-
-    //         if (selected === "cocoa" && material.cocoa) {
-    //             if (this.inventory.cocoa >= material.cocoa) {
-    //                 this.inventory.cocoa = this.inventory.cocoa - material.cocoa
-    //                 console.log("cocoa", this.inventory.cocoa)
-    //             }
-    //         }
-
-    //         if (selected === "lemon-tea" && material.lemon) {
-    //             if (this.inventory.lemon >= material.lemon) {
-    //                 this.inventory.lemon = this.inventory.lemon - material.lemon
-    //                 console.log("lemon", this.inventory.lemon)
-    //             }
-    //         }
-
-    //         this.inventory.sales = this.inventory.sales + selectedMenu.price
-    //     }
 }
